@@ -1,0 +1,22 @@
+.kb {
+  block-size: 10rem;
+  display: grid;
+  grid-column-gap: 1px;
+  grid-template-columns: repeat(var(--_r, 156), 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+
+.kb [data-note] {
+  background-color: var(--_bgc, #FFF);
+  border: 0;
+  border-radius: 0 0 3px 3px;
+  grid-column: var(--gcs) / span var(--_csp, 3);
+  grid-row: 1 / span var(--_rsp, 5);
+}
+
+.kb [data-note*="#"] { 
+  --_bgc: #000;
+  --_csp: 2;
+  --_rsp: 3;
+  position: relative;
+}
