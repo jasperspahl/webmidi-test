@@ -4,6 +4,9 @@
   grid-column-gap: 1px;
   grid-template-columns: repeat(var(--_r, 156), 1fr);
   grid-template-rows: repeat(5, 1fr);
+  padding: .5em;
+  border-radius: 5px;
+  background-color: #100c08;
 }
 
 .kb [data-note] {

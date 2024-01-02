@@ -26,7 +26,7 @@ export class PianoKeyboard extends HTMLElement {
 		this.shadow.innerHTML = `<style>${styles}</style>`;
 
 		const start = Number(this.getAttribute("start")) || 21;
-		const end = Number(this.getAttribute("end")) || 108;
+		const end = Number(this.getAttribute("end")) || 109;
 		this.keys = this.freqs(start, end);
 		this.shadow.innerHTML = this.render();
 	}
@@ -67,9 +67,10 @@ export class PianoKeyboard extends HTMLElement {
 	}
 
 	private render() {
+		const whiteKeyCount = this.keys.filter(item => item.note.length === 1).length;
 		return html`
 			<style>${styles}</style>
-			<div class="kb">${this.renderKeys()}</div>
+			<div class="kb" style="--_r:${whiteKeyCount*3}">${this.renderKeys()}</div>
 			<style id="midiStyle"></style>
 		`;
 	}

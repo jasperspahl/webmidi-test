@@ -109,7 +109,7 @@ function onMIDISuccess(midiAccess: MIDIAccess) {
 		<button id="selectHue" disabled>Select Hue Control</button>
 		<p id="midiMessage">Status: 00 Data 0: 00 Data 1: 00</p>
 		<p class="currentColor">Current Color: <span id="currentColor"></span></p>
-		<piano-keyboard start=21 stop=108><piano-keyboard>`;
+		<piano-keyboard start="21" end="109"><piano-keyboard>`;
 
 	const selectBrightnessButton = document.querySelector<HTMLButtonElement>("#selectBrightness")!;
 	const selectHueButton = document.querySelector<HTMLButtonElement>("#selectHue")!;
