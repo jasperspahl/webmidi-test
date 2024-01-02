@@ -2,7 +2,9 @@ import "./style.css";
 import { error, info } from "./errors";
 import { map } from "./utils";
 import { NoteColor } from "./client";
-import { createKeyboard, updateKeyboard } from "./keyboard";
+import { defineKeyboardElement, KeyboardKey, PianoKeyboard } from "./keyboard";
+
+defineKeyboardElement();
 
 let midiInput: MIDIInput;
 
@@ -42,6 +44,21 @@ const convertStateToNodeColors: () => NoteColor[] = () => {
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 
+function onNoteOn(this: PianoKeyboard, ev: CustomEvent<KeyboardKey>) {
+	const { detail } = ev;
+	const { midi } = detail;
+	state[midi] = { brightness: 127, hue: lastHue };
+	activeNodes.push(midi);
+	this.update(convertStateToNodeColors());
+}
+
+function onNoteOff(this: PianoKeyboard, ev: CustomEvent<KeyboardKey>) {
+	const { detail } = ev;
+	const { midi } = detail;
+	activeNodes = activeNodes.filter((node) => node !== midi);
+	this.update(convertStateToNodeColors());
+}
+
 function onMIDIMessage(this: MIDIInput, ev: Event){
 	const midiMessageDiv = document.querySelector<HTMLDivElement>("#midiMessage")!;
 	if (ev instanceof MIDIMessageEvent) {
@@ -77,7 +94,7 @@ function onMIDIMessage(this: MIDIInput, ev: Event){
 				}
 				break;
 		}
-		updateKeyboard(convertStateToNodeColors());
+		document.querySelector<PianoKeyboard>("piano-keyboard")!.update(convertStateToNodeColors());
 	} else {
 		error`Midi Message Event is not an instance of MIDIMessageEvent`;
 	}
@@ -92,7 +109,7 @@ function onMIDISuccess(midiAccess: MIDIAccess) {
 		<button id="selectHue" disabled>Select Hue Control</button>
 		<p id="midiMessage">Status: 00 Data 0: 00 Data 1: 00</p>
 		<p class="currentColor">Current Color: <span id="currentColor"></span></p>
-		<div id="keyboard"></div>`;
+		<piano-keyboard start=21 stop=108><piano-keyboard>`;
 
 	const selectBrightnessButton = document.querySelector<HTMLButtonElement>("#selectBrightness")!;
 	const selectHueButton = document.querySelector<HTMLButtonElement>("#selectHue")!;
@@ -102,6 +119,10 @@ function onMIDISuccess(midiAccess: MIDIAccess) {
 	selectHueButton.addEventListener("click", () => {
 		selectingstate = "hue";
 	});
+
+	const pianoKeyboard = document.querySelector<PianoKeyboard>("piano-keyboard")!;
+	pianoKeyboard.onNoteOn = onNoteOn;
+	pianoKeyboard.onNoteOff = onNoteOff;
 
 	const midiInputSelect = document.querySelector<HTMLSelectElement>("#midiInput")!;
 	midiAccess.inputs.forEach((input) => {
@@ -119,7 +140,7 @@ function onMIDISuccess(midiAccess: MIDIAccess) {
 		selectBrightnessButton.disabled = false;
 		selectHueButton.disabled = false;
 	});
-	createKeyboard(21, 108);
+
 }
 
 const setupMidi = async () => {
