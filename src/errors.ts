@@ -16,6 +16,9 @@ export const error = (template: TemplateStringsArray, ...args: any[]) => {
 
 	errorsContainer.appendChild(errorDiv);
 	console.error(String.raw(template, ...args), ...args);
+	setTimeout(() => {
+		errorDiv.remove();
+	}, 5000);
 };
 
 export const info = (template: TemplateStringsArray, ...args: any[]) => {
@@ -32,4 +35,7 @@ export const info = (template: TemplateStringsArray, ...args: any[]) => {
 
 	errorsContainer.appendChild(infoDiv);
 	console.info(String.raw(template, ...args), ...args);
+	setTimeout(() => {
+		infoDiv.remove();
+	}, 2000);
 }
