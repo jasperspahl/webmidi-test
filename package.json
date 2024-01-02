@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-	"build-pages": "tsc && vite build --base=/webmidi-test/"
+	"build-pages": "tsc && vite build --base=/webmidi-test/",
     "preview": "vite preview"
   },
   "devDependencies": {
